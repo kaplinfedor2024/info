@@ -38,9 +38,10 @@
     }
 
     h1 {
-      font-size: 48px;
+      font-size: 64px;
       margin-bottom: 20px;
       animation: glow 2s ease-in-out infinite alternate;
+      letter-spacing: 5px;
     }
 
     @keyframes glow {
@@ -54,19 +55,56 @@
       opacity: 0.9;
     }
 
-    .loader {
-      width: 80px;
-      height: 80px;
-      border: 8px solid rgba(255, 255, 255, 0.3);
-      border-top: 8px solid #fff;
-      border-radius: 50%;
-      margin: 0 auto 30px;
-      animation: spin 1s linear infinite;
+    .counter-box {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 20px 40px;
+      border-radius: 15px;
+      margin: 30px 0;
+      display: inline-block;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .counter-label {
+      font-size: 18px;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    .counter {
+      font-size: 48px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 18px 50px;
+      font-size: 22px;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      background: rgba(255, 255, 255, 0.3);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
     .fish {
@@ -80,29 +118,6 @@
       50% { transform: translateX(30px) rotate(10deg); }
     }
 
-    .progress-bar {
-      width: 300px;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 10px;
-      margin: 20px auto;
-      overflow: hidden;
-    }
-
-    .progress {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #667eea, #764ba2);
-      border-radius: 10px;
-      animation: load 3s ease-out infinite;
-    }
-
-    @keyframes load {
-      0% { width: 0%; }
-      50% { width: 70%; }
-      100% { width: 100%; }
-    }
-
     .emoji-rain {
       position: fixed;
       top: -50px;
@@ -113,29 +128,87 @@
     @keyframes fall {
       to { transform: translateY(110vh) rotate(360deg); }
     }
+
+    .success-message {
+      display: none;
+      margin-top: 20px;
+      font-size: 20px;
+      color: #4ade80;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="fish">🐟</div>
-    <h1>Le Fisherman</h1>
+    <div class="fish">🎣</div>
+    <h1>ПРОМО</h1>
     <p>Сайт в разработке</p>
     
-    <div class="loader"></div>
-    
-    <div class="progress-bar">
-      <div class="progress"></div>
+    <div class="counter-box">
+      <div class="counter-label">Посетителей сегодня:</div>
+      <div class="counter" id="counter">0</div>
     </div>
     
-    <p style="font-size: 18px; margin-top: 20px;">
-      Скоро открытие! 🎣
-    </p>
+    <br>
+    
+    <button class="btn" id="visitBtn">Я ПОСЕТИТЕЛЬ</button>
+    
+    <div class="success-message" id="successMsg">
+      ✅ Спасибо за визит!
+    </div>
   </div>
 
   <script>
-    // Создаём падающие эмодзи
+    // СЧЁТЧИК ПОСЕТИТЕЛЕЙ (localStorage)
+    const counterEl = document.getElementById('counter');
+    const btn = document.getElementById('visitBtn');
+    const successMsg = document.getElementById('successMsg');
+
+    // Проверяем, нажимал ли уже пользователь
+    const hasVisited = localStorage.getItem('hasVisited');
+
+    // Загружаем счётчик
+    let count = localStorage.getItem('visitCount') || 0;
+    counterEl.textContent = count;
+
+    // Если уже нажимал — блокируем кнопку
+    if (hasVisited === 'true') {
+      btn.disabled = true;
+      btn.textContent = 'Уже посещал';
+      successMsg.style.display = 'block';
+    }
+
+    // Обработка клика
+    btn.addEventListener('click', () => {
+      // Увеличиваем счётчик
+      count = parseInt(count) + 1;
+      localStorage.setItem('visitCount', count);
+      counterEl.textContent = count;
+
+      // Помечаем, что пользователь уже нажал
+      localStorage.setItem('hasVisited', 'true');
+
+      // Блокируем кнопку
+      btn.disabled = true;
+      btn.textContent = 'Уже посещал';
+
+      // Показываем сообщение
+      successMsg.style.display = 'block';
+
+      // Салют из эмодзи
+      for (let i = 0; i < 20; i++) {
+        setTimeout(createEmoji, i * 50);
+      }
+    });
+
+    // Падающие эмодзи
     function createEmoji() {
-      const emojis = ['🐟', '🎣', '⭐', '🌊', '💎'];
+      const emojis = ['🎣', '⭐', '🎉', '💎', '🐟'];
       const emoji = document.createElement('div');
       emoji.className = 'emoji-rain';
       emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
