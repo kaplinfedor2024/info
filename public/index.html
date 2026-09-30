@@ -3,24 +3,150 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Привет</title>
+  <title>Le Fisherman — Сайт в разработке</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: white;
-      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Arial', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
     }
+
+    .container {
+      text-align: center;
+      color: white;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
     h1 {
-      color: blue;
       font-size: 48px;
+      margin-bottom: 20px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #667eea; }
+      to { text-shadow: 0 0 20px #fff, 0 0 30px #667eea, 0 0 40px #764ba2; }
+    }
+
+    p {
+      font-size: 24px;
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .loader {
+      width: 80px;
+      height: 80px;
+      border: 8px solid rgba(255, 255, 255, 0.3);
+      border-top: 8px solid #fff;
+      border-radius: 50%;
+      margin: 0 auto 30px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .fish {
+      font-size: 60px;
+      animation: swim 4s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes swim {
+      0%, 100% { transform: translateX(-30px) rotate(-10deg); }
+      50% { transform: translateX(30px) rotate(10deg); }
+    }
+
+    .progress-bar {
+      width: 300px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+
+    .progress {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 10px;
+      animation: load 3s ease-out infinite;
+    }
+
+    @keyframes load {
+      0% { width: 0%; }
+      50% { width: 70%; }
+      100% { width: 100%; }
+    }
+
+    .emoji-rain {
+      position: fixed;
+      top: -50px;
+      font-size: 30px;
+      animation: fall 4s linear infinite;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <h1>Привет</h1>
+  <div class="container">
+    <div class="fish">🐟</div>
+    <h1>Le Fisherman</h1>
+    <p>Сайт в разработке</p>
+    
+    <div class="loader"></div>
+    
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+    
+    <p style="font-size: 18px; margin-top: 20px;">
+      Скоро открытие! 🎣
+    </p>
+  </div>
+
+  <script>
+    // Создаём падающие эмодзи
+    function createEmoji() {
+      const emojis = ['🐟', '🎣', '⭐', '🌊', '💎'];
+      const emoji = document.createElement('div');
+      emoji.className = 'emoji-rain';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + 'vw';
+      emoji.style.animationDuration = (Math.random() * 2 + 3) + 's';
+      document.body.appendChild(emoji);
+
+      setTimeout(() => emoji.remove(), 5000);
+    }
+
+    setInterval(createEmoji, 300);
+  </script>
 </body>
 </html>
