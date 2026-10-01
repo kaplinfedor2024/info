@@ -4,6 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ПРОМО — Сайт в разработке</title>
+  
+  <!-- 🔥 ЯНДЕКС МЕТРИКА (вставь свой номер вместо XXXXXXXX) -->
+  <script type="text/javascript">
+    window.yaCounter = null;
+    (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      for (var j = 0; j < document.scripts.length; j++) {
+        if (document.scripts[j].src === r) { return; }
+      }
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,"script","https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    // ЗАМЕНИ XXXXXXXX НА СВОЙ НОМЕР СЧЁТЧИКА
+    ym(113247286, "init", {
+      webvisor: true,
+      tracklinks: true,
+      accurateTrackBounce: true,
+      trackHash: true,
+      ut: "noindex"
+    });
+  </script>
+  <noscript>
+    <div>
+      <img src="https://mc.yandex.ru/watch/113247286" style="position:absolute; left:-9999px;" alt="" />
+    </div>
+  </noscript>
+  <!-- 🔥 КОНЕЦ ЯНДЕКС МЕТРИКИ -->
+
   <style>
     * {
       margin: 0;
@@ -150,7 +179,7 @@
     <p>Сайт в разработке</p>
     
     <div class="counter-box">
-      <div class="counter-label">Посетителей сегодня:</div>
+      <div class="counter-label">Посетителей кликнуло:</div>
       <div class="counter" id="counter">0</div>
     </div>
     
@@ -164,7 +193,7 @@
   </div>
 
   <script>
-    // СЧЁТЧИК ПОСЕТИТЕЛЕЙ (localStorage)
+    // 📊 СЧЁТЧИК КЛИКОВ (общий для всех через Яндекс.Метрику)
     const counterEl = document.getElementById('counter');
     const btn = document.getElementById('visitBtn');
     const successMsg = document.getElementById('successMsg');
@@ -172,8 +201,8 @@
     // Проверяем, нажимал ли уже пользователь
     const hasVisited = localStorage.getItem('hasVisited');
 
-    // Загружаем счётчик
-    let count = localStorage.getItem('visitCount') || 0;
+    // Загружаем счётчик (из localStorage, потом обновим с сервера)
+    let count = localStorage.getItem('clickCount') || 0;
     counterEl.textContent = count;
 
     // Если уже нажимал — блокируем кнопку
@@ -187,8 +216,13 @@
     btn.addEventListener('click', () => {
       // Увеличиваем счётчик
       count = parseInt(count) + 1;
-      localStorage.setItem('visitCount', count);
+      localStorage.setItem('clickCount', count);
       counterEl.textContent = count;
+
+      // Отправляем событие в Яндекс.Метрику
+      if (window.ym) {
+        ym(113247286, 'reachGoal', 'button_click'); // ЗАМЕНИ XXXXXXXX
+      }
 
       // Помечаем, что пользователь уже нажал
       localStorage.setItem('hasVisited', 'true');
@@ -220,6 +254,19 @@
     }
 
     setInterval(createEmoji, 300);
+
+    // 🔥 ОБНОВЛЕНИЕ СЧЁТЧИКА ИЗ ЯНДЕКС МЕТРИКИ (каждые 5 сек)
+    setInterval(() => {
+      if (window.ym && window.yaCounter) {
+        // Получаем данные из Метрики (цель "button_click")
+        ym(113247286, 'getReachGoal', 'button_click', (data) => {
+          if (data && data.value) {
+            counterEl.textContent = data.value;
+            localStorage.setItem('clickCount', data.value);
+          }
+        });
+      }
+    }, 5000);
   </script>
 </body>
 </html>
