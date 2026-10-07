@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карточки букмекеров</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    padding:30px;
+    background:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    color:#111;
+}
+
+.cards{
+    width:100%;
+    max-width:940px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+/* CARD */
+.bookmaker-card{
+    width:100%;
+    background:#f3f3f3;
+    border-radius:18px;
+    overflow:hidden;
+}
+
+/* HEADER */
+.bookmaker-header{
+    min-height:80px;
+    display:flex;
+    align-items:center;
+    padding:0 26px;
+    gap:28px;
+}
+
+.logo-link{
+    width:150px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    flex-shrink:0;
+}
+
+.logo-link img{
+    display:block;
+    max-width:100%;
+    max-height:45px;
+    width:auto;
+    height:auto;
+}
+
+.header-item{
+    display:flex;
+    align-items:center;
+    font-size:17px;
+    line-height:1;
+    white-space:nowrap;
+}
+
+.header-rating{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:17px;
+    line-height:1;
+    white-space:nowrap;
+}
+
+.star{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#ffad00;
+    font-size:19px;
+    line-height:1;
+    height:19px;
+}
+
+.header-buttons{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.btn-conditions{
+    height:51px;
+    padding:0 36px;
+    border:1px solid #555;
+    border-radius:16px;
+    background:transparent;
+    font-family:inherit;
+    font-size:16px;
+    cursor:pointer;
+    transition:background .2s ease;
+}
+
+.btn-conditions:hover{
+    background:#e8e8e8;
+}
+
+.btn-site{
+    height:51px;
+    padding:0 40px;
+    border:0;
+    border-radius:16px;
+    background:#00b781;
+    color:#fff;
+    font-family:inherit;
+    font-size:16px;
+    font-weight:600;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+}
+
+/* EXPANDABLE */
+.expandable-content{
+    display:none;
+}
+
+.bookmaker-card.open .expandable-content{
+    display:block;
+}
+
+/* CONDITIONS */
+.conditions{
+    padding:0 12px;
+}
+
+.conditions-inner{
+    background:#fff;
+    border-radius:12px;
+    padding:17px 18px;
+    margin-bottom:12px;
+}
+
+.conditions-title{
+    margin:0 0 7px;
+    font-size:16px;
+    font-weight:700;
+}
+
+.conditions-text{
+    margin:0;
+    font-size:15px;
+    line-height:21px;
+}
+
+/* PROMO */
+.promo{
+    margin:0 12px;
+    min-height:70px;
+    background:#fff;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    padding:0 16px;
+    gap:12px;
+}
+
+.gift{
+    width:30px;
+    height:30px;
+    flex-shrink:0;
+    border-radius:50%;
+    background:#00b781;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+}
+
+.promo-text{
+    font-size:16px;
+    font-weight:600;
+    line-height:20px;
+}
+
+.promo-link{
+    margin-left:auto;
+    color:#00a979;
+    font-size:16px;
+    font-weight:700;
+    text-decoration:none;
+    white-space:nowrap;
+}
+
+/* CONTENT */
+.content{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:18px;
+    padding:18px 28px 28px;
+}
+
+.section-title{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:14px;
+}
+
+.rating-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px 7px;
+}
+
+.rating-box{
+    background:#fff;
+    border-radius:10px;
+    padding:7px 10px;
+    font-size:16px;
+    line-height:22px;
+    white-space:nowrap;
+    display:inline-flex;
+    align-items:center;
+}
+
+.rating-box .score{
+    font-weight:600;
+    margin-left:3px;
+}
+
+.rating-box .star{
+    margin-left:3px;
+}
+
+.advantages{
+    padding-left:5px;
+}
+
+.advantages-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+.advantages-list li{
+    position:relative;
+    padding-left:22px;
+    margin-bottom:12px;
+    font-size:16px;
+    line-height:20px;
+}
+
+.advantages-list li::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:7px;
+    width:7px;
+    height:7px;
+    background:#00b781;
+    border-radius:50%;
+}
+
+/* TABLET */
+@media (max-width:800px){
+    body{padding:15px}
+
+    .bookmaker-header{
+        padding:15px;
+        flex-wrap:wrap;
+        gap:15px;
+    }
+
+    .logo-link{width:140px}
+
+    .header-buttons{
+        width:100%;
+        margin-left:0;
+    }
+
+    .btn-conditions,
+    .btn-site{
+        flex:1;
+    }
+
+    .content{
+        grid-template-columns:1fr;
+    }
+}
+
+/* MOBILE */
+@media (max-width:550px){
+    .bookmaker-card{border-radius:14px}
+
+    .bookmaker-header{gap:12px}
+
+    .logo-link{width:130px}
+
+    .header-item,
+    .header-rating{
+        font-size:14px;
+    }
+
+    .btn-conditions,
+    .btn-site{
+        padding:0 15px;
+    }
+
+    .promo{
+        align-items:flex-start;
+        padding:13px;
+    }
+
+    .promo-text{
+        font-size:14px;
+        line-height:20px;
+    }
+
+    .promo-link{
+        font-size:13px;
+    }
+
+    .content{
+        padding:16px;
+    }
+
+    .rating-box{
+        font-size:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cards">
+
+<!-- ================= CARD 1 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header">
+        <a href="#" class="logo-link" target="_blank" rel="nofollow sponsored noopener">
+            <img src="logo-01.png" alt="Логотип 1">
+        </a>
+
+        <div class="header-item">15 000 ₽</div>
+
+        <div class="header-rating">
+            <span>5</span><span class="star">★</span>
+        </div>
+
+        <div class="header-buttons">
+            <button class="btn-conditions" type="button">Условия</button>
+            <a href="#" class="btn-site" target="_blank" rel="nofollow sponsored noopener">На сайт</a>
+        </div>
+    </div>
+
+    <div class="expandable-content">
+        <div class="conditions">
+            <div class="conditions-inner">
+                <div class="conditions-title">Условия получения бонуса</div>
+                <p class="conditions-text">Здесь размещаются условия получения бонуса для первого букмекера.</p>
+            </div>
+        </div>
+
+        <div class="promo">
+            <div class="gift">🎁</div>
+            <div class="promo-text">Эксклюзивное предложение и промокод для новых игроков</div>
+            <a href="#" class="promo-link">ЗАБРАТЬ БОНУС</a>
+        </div>
+
+        <div class="content">
+            <div>
+                <div class="section-title">Рейтинг</div>
+                <div class="rating-list">
+                    <div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div>
+                    <div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div>
+                    <div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div>
+                    <div class="rating-box">Поддержка:<span class="score">4</span><span class="star">★</span></div>
+                    <div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div>
+                    <div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div>
+                </div>
+            </div>
+            <div class="advantages">
+                <div class="section-title">Преимущества букмекера</div>
+                <ul class="advantages-list">
+                    <li>Безусловный бонус новым игрокам</li>
+                    <li>Подробный матч-центр</li>
+                    <li>Хорошие коэффициенты</li>
+                    <li>Страховка экспрессов</li>
+                    <li>Множество способов пополнения</li>
+                    <li>Ставки на топ-турниры</li>
+                    <li>Калькулятор системы</li>
+                    <li>Дополнительные акции</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= CARD 2 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header">
+        <a href="#" class="logo-link" target="_blank" rel="nofollow sponsored noopener"><img src="logo-02.png" alt="Логотип 2"></a>
+        <div class="header-item">20 000 ₽</div>
+        <div class="header-rating"><span>5</span><span class="star">★</span></div>
+        <div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div>
+    </div>
+    <div class="expandable-content">
+        <div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Здесь размещаются условия получения бонуса для второго букмекера.</p></div></div>
+        <div class="promo"><div class="gift">🎁</div><div class="promo-text">Специальное предложение для новых пользователей</div><a href="#" class="promo-link">ПОЛУЧИТЬ</a></div>
+        <div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус новым игрокам</li><li>Матч-центр</li><li>Широкая линия</li><li>Экспресс-страховка</li><li>Удобное пополнение</li><li>Топовые турниры</li><li>Система ставок</li><li>Дополнительные акции</li></ul></div></div>
+    </div>
+</div>
+
+<!-- ================= CARD 3 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-03.png" alt="Логотип 3"></a><div class="header-item">10 000 ₽</div><div class="header-rating"><span>4.9</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content">
+        <div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Условия акции, требования к регистрации и другие ограничения указываются здесь.</p></div></div>
+        <div class="promo"><div class="gift">🎁</div><div class="promo-text">Специальный промокод для новых пользователей</div><a href="#" class="promo-link">УЗНАТЬ УСЛОВИЯ</a></div>
+        <div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус за регистрацию</li><li>Удобный матч-центр</li><li>Широкая линия ставок</li><li>Страховка экспрессов</li><li>Быстрые платежи</li><li>Ставки на спорт</li><li>Калькулятор системы</li><li>Промоакции для клиентов</li></ul></div></div>
+    </div>
+</div>
+
+<!-- ================= CARD 4 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-04.png" alt="Логотип 4"></a><div class="header-item">15 000 ₽</div><div class="header-rating"><span>4.8</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content">
+        <div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Условия получения предложения для четвертого букмекера.</p></div></div>
+        <div class="promo"><div class="gift">🎁</div><div class="promo-text">Эксклюзивное предложение для новых клиентов</div><a href="#" class="promo-link">ПОЛУЧИТЬ</a></div>
+        <div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус новым игрокам</li><li>Матч-центр</li><li>Выгодные коэффициенты</li><li>Экспресс-страховка</li><li>Разные способы оплаты</li><li>Спортивные турниры</li><li>Система ставок</li><li>Специальные предложения</li></ul></div></div>
+    </div>
+</div>
+
+<!-- ================= CARD 5 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-05.png" alt="Логотип 5"></a><div class="header-item">25 000 ₽</div><div class="header-rating"><span>4.8</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Условия бонусной программы и ограничения размещаются в этом блоке.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Промокод и специальное предложение</div><a href="#" class="promo-link">ПОЛУЧИТЬ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус за регистрацию</li><li>Подробный матч-центр</li><li>Широкая линия</li><li>Страховка экспрессов</li><li>Удобные платежи</li><li>Топовые турниры</li><li>Система ставок</li><li>Регулярные акции</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 6 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-06.png" alt="Логотип 6"></a><div class="header-item">12 000 ₽</div><div class="header-rating"><span>4.7</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Условия получения бонуса, требования к ставкам и срок действия предложения.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Специальное предложение для новых игроков</div><a href="#" class="promo-link">ПОДРОБНЕЕ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус новым игрокам</li><li>Матч-центр</li><li>Высокая линия</li><li>Страховка экспрессов</li><li>Разные способы оплаты</li><li>Спортивные события</li><li>Калькулятор системы</li><li>Акционные предложения</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 7 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-07.png" alt="Логотип 7"></a><div class="header-item">30 000 ₽</div><div class="header-rating"><span>4.7</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Условия получения бонуса и ограничения акции указываются здесь.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Эксклюзивное предложение новым пользователям</div><a href="#" class="promo-link">ПОЛУЧИТЬ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус за регистрацию</li><li>Расширенный матч-центр</li><li>Большая линия</li><li>Страховка экспрессов</li><li>Удобные платежи</li><li>Ставки на турниры</li><li>Система ставок</li><li>Дополнительные акции</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 8 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-08.png" alt="Логотип 8"></a><div class="header-item">18 000 ₽</div><div class="header-rating"><span>4.6</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Условия акции, минимальные требования и сроки действия предложения.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Промокод для новых пользователей</div><a href="#" class="promo-link">ПОДРОБНЕЕ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус новым игрокам</li><li>Удобный матч-центр</li><li>Широкая линия</li><li>Экспресс-страховка</li><li>Быстрые платежи</li><li>Топовые соревнования</li><li>Калькулятор системы</li><li>Специальные предложения</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 9 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-09.png" alt="Логотип 9"></a><div class="header-item">15 000 ₽</div><div class="header-rating"><span>4.6</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Подробные условия получения бонуса для девятой карточки.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Специальное предложение и промокод</div><a href="#" class="promo-link">ПОЛУЧИТЬ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус за регистрацию</li><li>Матч-центр</li><li>Хорошая линия</li><li>Страховка экспрессов</li><li>Удобные способы оплаты</li><li>Спортивные события</li><li>Система ставок</li><li>Акции для клиентов</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 10 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-10.png" alt="Логотип 10"></a><div class="header-item">20 000 ₽</div><div class="header-rating"><span>4.5</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Здесь размещаются актуальные условия бонусной программы.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Бонус и промокод для новых пользователей</div><a href="#" class="promo-link">ПОДРОБНЕЕ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус новым игрокам</li><li>Матч-центр</li><li>Широкая линия</li><li>Экспресс-страховка</li><li>Быстрые выплаты</li><li>Топовые турниры</li><li>Калькулятор системы</li><li>Регулярные акции</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 11 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-11.png" alt="Логотип 11"></a><div class="header-item">10 000 ₽</div><div class="header-rating"><span>4.5</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Условия бонуса, ограничения и требования к участию размещаются здесь.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Эксклюзивное предложение</div><a href="#" class="promo-link">ПОЛУЧИТЬ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус за регистрацию</li><li>Подробный матч-центр</li><li>Широкая линия</li><li>Страховка экспрессов</li><li>Удобные платежи</li><li>Спортивные события</li><li>Система ставок</li><li>Дополнительные предложения</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 12 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-12.png" alt="Логотип 12"></a><div class="header-item">15 000 ₽</div><div class="header-rating"><span>4.4</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Актуальные условия получения бонуса и ограничения предложения.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Промокод и бонус для новых игроков</div><a href="#" class="promo-link">ПОДРОБНЕЕ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус новым игрокам</li><li>Матч-центр</li><li>Большая линия</li><li>Страховка экспрессов</li><li>Разные способы оплаты</li><li>Топовые чемпионаты</li><li>Калькулятор системы</li><li>Промоакции</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 13 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-13.png" alt="Логотип 13"></a><div class="header-item">25 000 ₽</div><div class="header-rating"><span>4.4</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Подробные условия предложения, требования и ограничения размещаются в этом поле.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Специальный бонус для новых пользователей</div><a href="#" class="promo-link">ПОЛУЧИТЬ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус новым игрокам</li><li>Матч-центр</li><li>Широкая линия</li><li>Страховка экспрессов</li><li>Удобное пополнение</li><li>Ставки на турниры</li><li>Система ставок</li><li>Дополнительные акции</li></ul></div></div></div>
+</div>
+
+<!-- ================= CARD 14 ================= -->
+<div class="bookmaker-card">
+    <div class="bookmaker-header"><a href="#" class="logo-link"><img src="logo-14.png" alt="Логотип 14"></a><div class="header-item">20 000 ₽</div><div class="header-rating"><span>4.3</span><span class="star">★</span></div><div class="header-buttons"><button class="btn-conditions" type="button">Условия</button><a href="#" class="btn-site">На сайт</a></div></div>
+    <div class="expandable-content"><div class="conditions"><div class="conditions-inner"><div class="conditions-title">Условия получения бонуса</div><p class="conditions-text">Здесь можно указать актуальные условия бонуса и все необходимые ограничения.</p></div></div><div class="promo"><div class="gift">🎁</div><div class="promo-text">Эксклюзивное предложение для новых клиентов</div><a href="#" class="promo-link">ПОДРОБНЕЕ</a></div><div class="content"><div><div class="section-title">Рейтинг</div><div class="rating-list"><div class="rating-box">Оценка пользователей:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Удобство:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Линия:<span class="score">4</span><span class="star">★</span></div><div class="rating-box">Поддержка:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Коэффициенты:<span class="score">5</span><span class="star">★</span></div><div class="rating-box">Надежность:<span class="score">5</span><span class="star">★</span></div></div></div><div class="advantages"><div class="section-title">Преимущества букмекера</div><ul class="advantages-list"><li>Бонус за регистрацию</li><li>Матч-центр</li><li>Широкая линия ставок</li><li>Страховка экспрессов</li><li>Удобные платежи</li><li>Спортивные турниры</li><li>Калькулятор системы</li><li>Регулярные предложения</li></ul></div></div></div>
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.bookmaker-card').forEach(function(card){
+    const button = card.querySelector('.btn-conditions');
+
+    button.addEventListener('click', function(){
+        card.classList.toggle('open');
+    });
+});
+</script>
+
+</body>
+</html>
