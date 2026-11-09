@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://promo-info.vercel.app/sitemap.xml
